@@ -28,6 +28,9 @@ app.get("/api/:date?", function (req, res) {
   let dateObj = new Date(date);
   if (dateObj == "Invalid Date") {
     res.json({ error: "Invalid Date" });
+  } else if (date == undefined) {
+      res.json({ unix: new Date().getTime(), utc: new Date().toUTCString() });
+    
   } else {
     res.json({ unix: dateObj.getTime(), utc: dateObj.toUTCString() });
   }
