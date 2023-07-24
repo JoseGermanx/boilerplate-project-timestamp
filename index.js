@@ -25,7 +25,7 @@ app.get("/api/hello", function (req, res) {
 
 let dateObj = {}
 
-app.get('/api/:dateInput?', (req, res) => {
+app.get('/api/:dateInput', (req, res) => {
   let dateInput = req.params.dateInput;
   let dateGet = new Date(dateInput);
   
