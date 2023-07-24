@@ -58,8 +58,12 @@ app.get("/api/:date?", function (req, res) {
   }
   res.json(dateObj);
 
+});
 
-
+app.get("/api", function (req, res) {
+  dateObj["unix"] = new Date().getTime();
+  dateObj["utc"] = new Date().toUTCString();
+  res.json(dateObj);
 });
 
 // listen for requests :)
