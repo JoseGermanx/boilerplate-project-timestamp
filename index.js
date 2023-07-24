@@ -23,39 +23,40 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
-let responseObject = {}
+let dateObj = {}
 
-app.get('/api/:dateInput', (request, response) => {
-  let dateInput = request.params.dateInput
+app.get('/api/:dateInput', (req, res) => {
+  let dateInput = req.params.dateInput;
+  let dateGet = new Date(dateInput);
   
   if(dateInput.includes('-')){
     /* Date String */
-    responseObject['unix'] = new Date(dateInput).getTime()
-    responseObject['utc'] = new Date(dateInput).toUTCString()
+    dateObj['unix'] = new Date(dateInput).getTime()
+    dateObj['utc'] = new Date(dateInput).toUTCString()
   }else{
     /* Timestamp */
     dateInput = parseInt(dateInput)
     
-    responseObject['unix'] = new Date(dateInput).getTime()
-    responseObject['utc'] = new Date(dateInput).toUTCString()
+    dateObj['unix'] = new Date(dateInput).getTime()
+    dateObj['utc'] = new Date(dateInput).toUTCString()
   }
   
-  if(!responseObject['unix'] || !responseObject['utc']){
-    response.json({error: 'Invalid Date'})
+  if(!dateObj['unix'] || !dateObj['utc']){
+    res.json({error: 'Invalid Date'})
   }
   
   
-  response.json(responseObject)
+  res.json(dateObj)
 })
 
-app.get('/api/', (request, response) => {
-  responseObject['unix'] = new Date().getTime()
-  responseObject['utc'] = new Date().toUTCString()
+app.get('/api/', (req, res) => {
+  dateObj['unix'] = new Date().getTime()
+  dateObj['utc'] = new Date().toUTCString()
   
-  response.json(responseObject)
+  res.json(dateObj)
 })
 
-// listen for requests :)
+// listen for reqs :)
 var listener = app.listen(process.env.PORT, function () {
   console.log("Your app is listening on port " + listener.address().port);
   console.log("http://localhost:" + listener.address().port);
