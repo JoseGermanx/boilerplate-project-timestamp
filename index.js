@@ -27,6 +27,15 @@ app.get("/api/:date?", function (req, res) {
   const date = req.params.date;
   const dateObj = {};
   console.log(date);
+  if (date === undefined) {
+    dateObj["unix"] = new Date().getTime();
+    res.json(dateObj);
+    return;
+  }
+  if (date === "Invalid Date") {
+    res.json({ error: "Invalid Date" });
+    return;
+  }
 
   if (date.includes("-")) {
     dateObj["unix"] = new Date(date).getTime();
