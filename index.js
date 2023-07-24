@@ -23,48 +23,37 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
-app.get("/api/:date?", function (req, res) { 
-  let date = req.params.date;
-  let dateFormat = new Date(date);
-  const dateObj = {};
-  console.log(dateFormat);
-  if (date === undefined) {
-    dateObj["unix"] = dateFormat.getTime();
-    res.json(dateObj);
-    return;
-  }
-  if (dateFormat === "Invalid Date") {
-    res.json({ error: "Invalid Date" });
-    return;
-  }
-  if (date === undefined) {
-    dateObj["unix"] = dateFormat.getTime();
-    res.json(dateObj);
-    return;
-  }
+let responseObject = {}
 
-  if (date.includes("-")) {
-    dateObj["unix"] = dateFormat.getTime();
-    dateObj["utc"] = dateFormat.toUTCString();
-  } else {
-    dateFormat = parseInt(date);
-    dateObj["unix"] = new Date(dateFormat).getTime();
-    dateObj["utc"] = new Date(dateFormat).toUTCString();
+app.get('/api/:dateInput', (request, response) => {
+  let dateInput = request.params.dateInput
+  
+  if(dateInput.includes('-')){
+    /* Date String */
+    responseObject['unix'] = new Date(dateInput).getTime()
+    responseObject['utc'] = new Date(dateInput).toUTCString()
+  }else{
+    /* Timestamp */
+    dateInput = parseInt(dateInput)
+    
+    responseObject['unix'] = new Date(dateInput).getTime()
+    responseObject['utc'] = new Date(dateInput).toUTCString()
   }
-
-  if(!dateObj["unix"] || !dateObj["utc"]){
-    res.json({ error: "Invalid Date" });
-    return;
+  
+  if(!responseObject['unix'] || !responseObject['utc']){
+    response.json({error: 'Invalid Date'})
   }
-  res.json(dateObj);
+  
+  
+  response.json(responseObject)
+})
 
-});
-
-app.get("/api", function (req, res) {
-  dateObj["unix"] = new Date().getTime();
-  dateObj["utc"] = new Date().toUTCString();
-  res.json(dateObj);
-});
+app.get('/api/', (request, response) => {
+  responseObject['unix'] = new Date().getTime()
+  responseObject['utc'] = new Date().toUTCString()
+  
+  response.json(responseObject)
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
