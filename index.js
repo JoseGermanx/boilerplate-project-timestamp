@@ -32,8 +32,13 @@ app.get("/api/:date?", function (req, res) {
     res.json(dateObj);
     return;
   }
-  if (date === "Invalid Date") {
+  if (new Date(date) === "Invalid Date") {
     res.json({ error: "Invalid Date" });
+    return;
+  }
+  if (date === "") {
+    dateObj["unix"] = new Date().getTime();
+    res.json(dateObj);
     return;
   }
 
