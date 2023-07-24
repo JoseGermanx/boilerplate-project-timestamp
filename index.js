@@ -24,8 +24,8 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get("/api/:date?", function (req, res) { 
-  const date = req.params.date;
-  const dateFormat = new Date(date);
+  let date = req.params.date;
+  let dateFormat = new Date(date);
   const dateObj = {};
   console.log(dateFormat);
   if (date === undefined) {
@@ -46,13 +46,19 @@ app.get("/api/:date?", function (req, res) {
   if (date.includes("-")) {
     dateObj["unix"] = dateFormat.getTime();
     dateObj["utc"] = dateFormat.toUTCString();
-    res.json(dateObj);
   } else {
-    const dateInt = parseInt(date);
-    dateObj["unix"] = new Date(dateInt).getTime();
-    dateObj["utc"] = new Date(dateInt).toUTCString();
-    res.json(dateObj);
+    dateFormat = parseInt(date);
+    dateObj["unix"] = new Date(dateFormat).getTime();
+    dateObj["utc"] = new Date(dateFormat).toUTCString();
   }
+
+  if(!dateObj["unix"] || !dateObj["utc"]){
+    res.json({ error: "Invalid Date" });
+    return;
+  }
+  res.json(dateObj);
+
+
 
 });
 
