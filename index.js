@@ -31,11 +31,14 @@ app.get("/api/:date?", function (req, res) {
   if (date.includes("-")) {
     dateObj["unix"] = new Date(date).getTime();
     dateObj["utc"] = new Date(date).toUTCString();
+    res.json(dateObj);
   } else {
     const dateInt = parseInt(date);
     dateObj["unix"] = new Date(dateInt).getTime();
     dateObj["utc"] = new Date(dateInt).toUTCString();
+    res.json(dateObj);
   }
+
 });
 
 // listen for requests :)
