@@ -29,7 +29,7 @@ app.get('/api/:dateInput', (req, res) => {
   let dateInput = req.params.dateInput;
   let dateGet = new Date(dateInput);
   
-  if(dateInput.includes('-')){
+  if(dateInput.includes('-') || dateInput.includes(' ')){
     /* Date String */
     dateObj['unix'] = new Date(dateInput).getTime()
     dateObj['utc'] = new Date(dateInput).toUTCString()
